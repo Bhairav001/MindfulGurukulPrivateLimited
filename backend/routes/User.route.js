@@ -36,6 +36,14 @@ UserRouter.post("/login",async(req,res)=>{
     }
 });
 
+UserRouter.get("/",async(req,res)=>{
+    try {
+        const users = await UserModel.find(req.body)
+        res.send(users)
+    } catch (error) {
+        console.log(error.message)
+    }
+})
 module.exports={
     UserRouter
 }

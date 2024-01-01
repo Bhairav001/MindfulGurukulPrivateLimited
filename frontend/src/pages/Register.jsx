@@ -1,14 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Register = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    gender: '',
+    howDidYouHear: [],
+    city: '',
+    state: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, checked, options } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === 'checkbox' ? (checked ? [...prevData[name], value] : prevData[name].filter(item => item !== value)) : type === 'select-multiple' ? Array.from(options).filter(option => option.selected).map(option => option.value) : value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:8080/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit form');
+      }
+
+      console.log('Form submitted successfully',response);
+    } catch (error) {
+      console.error('Error submitting form:', error.message);
+    }
+  };
+
   return (
     <div className='flex flex-col lg:flex-row h-screen'>
-      <div className='lg:w-1/2 bg-gray-50 dark:bg-gray-900 flex items-center justify-center'>
+      <div className='lg:w-1/2 flex items-center justify-center'>
         <img
           src='https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/illustration.svg'
           alt='Illustration'
-          // className='max-w-full max-h-full'
-        />  
+          className='max-w-full max-h-full'
+        />
       </div>
       <div className='lg:w-1/2 flex items-center justify-center'>
         <div className='w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700'>
@@ -16,7 +57,7 @@ const Register = () => {
             <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white'>
               Create an account
             </h1>
-            <form className='space-y-4 md:space-y-6' action='#'>
+            <form className='space-y-4 md:space-y-6' onSubmit={handleSubmit}>
               <div>
                 <label htmlFor='name' className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>
                   Name (Alphabets only)
@@ -27,8 +68,9 @@ const Register = () => {
                   id='name'
                   pattern="[A-Za-z]+"
                   className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                  placeholder='John Doe'
+                  placeholder='Bhairav'
                   required=''
+                  onChange={handleChange}
                 />
               </div>
               <div>
@@ -43,6 +85,7 @@ const Register = () => {
                   className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                   placeholder='name@company.com'
                   required=''
+                  onChange={handleChange}
                 />
               </div>
               <div>
@@ -53,24 +96,25 @@ const Register = () => {
                   type='text'
                   name='phone'
                   id='phone'
-                  pattern="[0-9]*"
+                  pattern="[0-9]+"
                   className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                   placeholder='1234567890'
                   required=''
+                  onChange={handleChange}
                 />
               </div>
               <div>
                 <label className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'>Gender</label>
                 <div className='flex items-center'>
-                  <input type='radio' id='male' name='gender' value='male' className='mr-2' required='' />
+                  <input type='radio' id='male' name='gender' value='Male' className='mr-2' required='' onChange={handleChange} />
                   <label htmlFor='male' className='text-sm font-medium text-gray-900 dark:text-white'>Male</label>
                 </div>
                 <div className='flex items-center'>
-                  <input type='radio' id='female' name='gender' value='female' className='mr-2' required='' />
+                  <input type='radio' id='female' name='gender' value='Female' className='mr-2' required='' onChange={handleChange} />
                   <label htmlFor='female' className='text-sm font-medium text-gray-900 dark:text-white'>Female</label>
                 </div>
                 <div className='flex items-center'>
-                  <input type='radio' id='others' name='gender' value='others' className='mr-2' required='' />
+                  <input type='radio' id='others' name='gender' value='Others' className='mr-2' required='' onChange={handleChange} />
                   <label htmlFor='others' className='text-sm font-medium text-gray-900 dark:text-white'>Others</label>
                 </div>
               </div>
@@ -83,9 +127,10 @@ const Register = () => {
                     <input
                       type='checkbox'
                       id='linkedin'
-                      name='how_heard[]'
-                      value='linkedin'
+                      name='howDidYouHear'
+                      value='LinkedIn'
                       className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800'
+                      onChange={handleChange}
                     />
                   </div>
                   <div className='ml-3 text-sm'>
@@ -99,9 +144,10 @@ const Register = () => {
                     <input
                       type='checkbox'
                       id='friends'
-                      name='how_heard[]'
-                      value='friends'
+                      name='howDidYouHear'
+                      value='Friends'
                       className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800'
+                      onChange={handleChange}
                     />
                   </div>
                   <div className='ml-3 text-sm'>
@@ -115,9 +161,10 @@ const Register = () => {
                     <input
                       type='checkbox'
                       id='job_portal'
-                      name='how_heard[]'
-                      value='job_portal'
+                      name='howDidYouHear'
+                      value='Job Portal'
                       className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800'
+                      onChange={handleChange}
                     />
                   </div>
                   <div className='ml-3 text-sm'>
@@ -131,9 +178,10 @@ const Register = () => {
                     <input
                       type='checkbox'
                       id='others'
-                      name='how_heard[]'
-                      value='others'
+                      name='howDidYouHear'
+                      value='Others'
                       className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800'
+                      onChange={handleChange}
                     />
                   </div>
                   <div className='ml-3 text-sm'>
@@ -152,6 +200,7 @@ const Register = () => {
                   name='city'
                   className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                   required=''
+                  onChange={handleChange}
                 >
                   <option value='Mumbai'>Mumbai</option>
                   <option value='Pune'>Pune</option>
@@ -170,6 +219,7 @@ const Register = () => {
                   className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                   placeholder='Type or select from the list'
                   required=''
+                  onChange={handleChange}
                 />
                 <datalist id='states'>
                   <option value='Gujarat' />
@@ -179,7 +229,7 @@ const Register = () => {
               </div>
               <button
                 type='submit'
-                className='flex m-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+                className='w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'
               >
                 Save
               </button>
