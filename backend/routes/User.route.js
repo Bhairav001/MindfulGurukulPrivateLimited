@@ -1,6 +1,6 @@
 const express = require("express");
 const { UserModel } = require("../model/User.model");
-
+const jwt = require("jsonwebtoken")
 const UserRouter = express.Router();
 
 
@@ -27,7 +27,8 @@ UserRouter.post("/login",async(req,res)=>{
         const user = await UserModel.find({email:email});
         console.log("user",user)
         if(user.length>0){
-            res.send({msg:"user login"})
+            const token = jwt.sign({userID:user[0]._id},"masai")
+            res.send({msg:"user login","token":token})
         }else{
             res.send({msg:"Wrong Credintials"})
         }

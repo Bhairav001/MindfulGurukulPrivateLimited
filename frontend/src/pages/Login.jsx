@@ -16,7 +16,10 @@ const Login = () => {
       },
     })
     .then((res) => res.json())
-    .then((res)=>res.json())
+    .then((res)=>{
+      console.log("ress",res);
+      localStorage.setItem("token",res.token)
+    })
   }
   return (
     <div className='flex flex-col lg:flex-row h-screen'>

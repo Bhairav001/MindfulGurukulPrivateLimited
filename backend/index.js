@@ -3,6 +3,7 @@ require("dotenv").config()
 const cors = require("cors");
 const { connection } = require("./config/db");
 const { UserRouter } = require("./routes/User.route");
+const { crudRoutes } = require("./routes/Form.route");
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 
 app.use("/users",UserRouter)
+app.use("/crud",crudRoutes)
 app.listen(process.env.PORT,async()=>{
     try {
         await connection
