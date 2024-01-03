@@ -12,7 +12,9 @@ app.use(cors())
 app.use(express.json());
 
 app.use(express.urlencoded({extended:true}))
-
+app.get("/",(req,res)=>{
+    res.send("Mindful gurukul")
+})
 app.use("/users",UserRouter)
 app.use("/crud",crudRoutes)
 app.listen(process.env.PORT,async()=>{
