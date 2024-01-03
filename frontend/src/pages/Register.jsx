@@ -17,12 +17,11 @@ const Register = () => {
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === 'checkbox' ? (checked ? [...prevData[name], value] : prevData[name].filter(item => item !== value)) : type === 'select-multiple' ? Array.from(options).filter(option => option.selected).map(option => option.value) : value,
-    }));
-  };
+     }));
+    };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const response = await fetch('http://localhost:8080/users/register', {
         method: 'POST',
@@ -37,6 +36,7 @@ const Register = () => {
       }
 
       console.log('Form submitted successfully',response);
+      alert("Form submitted successfully")
     } catch (error) {
       console.error('Error submitting form:', error.message);
     }
@@ -229,7 +229,7 @@ const Register = () => {
               </div>
               <button
                 type='submit'
-                className='w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'
+                className='w-full text-black bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'
               >
                 Save
               </button>

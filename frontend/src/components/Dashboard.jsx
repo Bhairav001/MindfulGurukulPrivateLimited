@@ -18,6 +18,7 @@ const Crud = () => {
   });
   const [dataList, setDataList] = useState([]);
   const [editSection, setEditSection] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const navigate = useNavigate()
   const handleOnChange = (e) => {
@@ -41,15 +42,18 @@ const Crud = () => {
   const getFetchData = async () => {
     const data = await axios.get('http://localhost:8080/crud');
     if (data.data.success) {
-      setDataList(data.data.data);
+      const filteredData = data.data.data.filter((item) => {
+        const searchFields = ['name', 'email', 'mobile'];
+        return searchFields.some((field) => item[field].toLowerCase().includes(searchTerm.toLowerCase()));
+      });
+      setDataList(filteredData);
     }
   };
 
-  console.log('dataList', dataList);
-
   useEffect(() => {
     getFetchData();
-  }, []);
+  }, [searchTerm]);
+
 
   const handleDelete = async (id) => {
     const data = await axios.delete(`http://localhost:8080/crud/delete/${id}`);
@@ -92,7 +96,13 @@ function handleLogout(){
     <>
       <div className="container mx-auto p-4">
         <div className='flex justify-between'>
-
+        <input
+            type="text"
+            placeholder="Search by name, email, or mobile"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="p-2 border border-gray-300 rounded"
+          />
         <button
           className="btn btn-add bg-blue-500 text-white p-2 rounded hover:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200"
           onClick={() => setAddSection(true)}
