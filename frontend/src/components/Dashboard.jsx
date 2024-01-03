@@ -31,7 +31,7 @@ const Crud = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const data = await axios.post('http://localhost:8080/crud/create', formData);
+    const data = await axios.post('https://mindful-gurukul-private-limited-8psl.vercel.app/crud/create', formData);
     if (data.data.success) {
       setAddSection(false);
       alert(data.data.message);
@@ -40,7 +40,7 @@ const Crud = () => {
   }
 
   const getFetchData = async () => {
-    const data = await axios.get('http://localhost:8080/crud');
+    const data = await axios.get('https://mindful-gurukul-private-limited-8psl.vercel.app/crud');
     if (data.data.success) {
       const filteredData = data.data.data.filter((item) => {
         const searchFields = ['name', 'email', 'mobile'];
@@ -56,7 +56,7 @@ const Crud = () => {
 
 
   const handleDelete = async (id) => {
-    const data = await axios.delete(`http://localhost:8080/crud/delete/${id}`);
+    const data = await axios.delete(`https://mindful-gurukul-private-limited-8psl.vercel.app/crud/delete/${id}`);
 
     if (data.data.success) {
       alert(data.data.message);
@@ -66,7 +66,7 @@ const Crud = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const data = await axios.put('http://localhost:8080/crud/update', formDataEdit);
+    const data = await axios.put('https://mindful-gurukul-private-limited-8psl.vercel.app/crud/update', formDataEdit);
     console.log('updatedData', data);
     if (data.data.success) {
       getFetchData();

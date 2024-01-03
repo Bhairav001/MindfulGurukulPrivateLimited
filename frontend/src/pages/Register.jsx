@@ -23,7 +23,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8080/users/register', {
+      const response = await fetch('https://mindful-gurukul-private-limited-8psl.vercel.app/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
