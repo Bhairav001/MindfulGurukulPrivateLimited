@@ -8,7 +8,7 @@ const Login = () => {
       email,
       password,
     }
-    fetch('https://mindful-gurukul-private-limited-8psl.vercel.app/users/login',{
+    fetch('https://mindful-gurukul-private-limited.vercel.app/users/login',{
       method: 'POST',
       body: JSON.stringify(payload),
       headers: {
